@@ -4,6 +4,7 @@ class TaskController < ApplicationController
   get '/' do
     # 1. get a list of all task models
     # and set it to the @tasks variable
+    @tasks=Task.all
 
     # return view
     erb :read
@@ -24,7 +25,10 @@ class TaskController < ApplicationController
     # Assign it to a variable called @task
     # update the attributes withn the values
     # from params. Then save it!
-
+    @task=Task.new
+    @task.name=params[:name]
+    @task.description=params[:desc]
+    @task.save
     # return view
     @message = 'You task was added!'
     erb :message
@@ -38,6 +42,7 @@ class TaskController < ApplicationController
     # should have no problem finding it?
     # Assign it the @task instance variable.
     # This view will not render until the code works.
+    @task = Task.find(params[:id])
 
     # return view
     erb :update
@@ -46,10 +51,14 @@ class TaskController < ApplicationController
     # 4. Just like create, we need to find our model.
     # Then update the attributes and save it!
     # Let's assing our model to the task.
-    # Shhh... we've used a *hidden* input on the :create
+    # Shhh... we've used a *hidden* input on the :update
     # view to hold the id. This is so users can't try
     # to edit it! Sneaky, sneaky.
 
+    @task=Task.find(params[:id])
+    @task.name=params[:name]
+    @task.description=params[:desc]
+    @task.save
     # return view
     @message = 'You task was updated!'
     erb :message
@@ -62,6 +71,9 @@ class TaskController < ApplicationController
     # Since we know the `id` of the model, we
     # should have no problem finding it?
     # We need it for our view.
+    
+    @task=Task.find(params[:id])
+
 
     # return view
     erb :destroy
@@ -73,7 +85,8 @@ class TaskController < ApplicationController
     # should have no problem finding it?
     # Then, we just need to remove it from
     # our database table.
-
+    @task=Task.find(params[:id])
+    @task.destroy
     # return view
     @message = 'You task was destroyed! BUAHAHAHA'
     erb :message
